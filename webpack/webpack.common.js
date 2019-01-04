@@ -1,51 +1,14 @@
+/* eslint linebreak-style: ["error", "windows"] */
 const webpack = require('webpack');
 const convert = require('koa-connect');
 const history = require('connect-history-api-fallback');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonPaths = require('./paths');
+const modules = require('./modules');
 
 module.exports = {
   entry: commonPaths.entryPath,
-  module: {
-    rules: [
-      {
-        enforce: 'pre',
-        test: /\.(js|jsx)$/,
-        loader: 'eslint-loader',
-        exclude: /(node_modules)/,
-        options: {
-          emitWarning: process.env.NODE_ENV !== 'production',
-        },
-      },
-      {
-        test: /\.(js|jsx)$/,
-        loader: 'babel-loader',
-        exclude: /(node_modules)/,
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: commonPaths.imagesFolder,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(woff2|ttf|woff|eot)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: commonPaths.fontsFolder,
-            },
-          },
-        ],
-      },
-    ],
-  },
+  module: modules(),
   serve: {
     add: app => {
       app.use(convert(history()));
